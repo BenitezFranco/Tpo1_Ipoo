@@ -1,16 +1,17 @@
 <?php
     include 'Viaje.php';
+    include 'Menu.php';
 
     $viaje= viajeInicial();
-
+    $menu= new Menu();
     do{
-        $opcion= menuViaje();
+        $opcion= $menu->menuViaje();
         switch($opcion){
             case 1: 
                 $viaje= ingresoViaje();
                 break;
             case 2: 
-                $viaje= modificarViaje($viaje);
+                $viaje= modificarViaje($viaje,$menu);
                 break;
             case 3:
                 echo " ".$viaje->__toString()."\n";
@@ -38,11 +39,15 @@
                 $band=false;
             }
         }while($band);
-        $pasajeros=crearPasajeros($cantidad);
-
+        echo"Ingrese el costo\n";
+        $costo= trim(fgets(STDIN));
         $responsable= crearResponsable();
-
-        return new Viaje($codigo, $destino, $cantidad, $pasajeros, $responsable);
+        $viaje= new Viaje($codigo, $destino, $cantidad, [], $responsable,$costo,0);
+        $pasajeros=crearPasajeros($cantidad);
+        for($i=0;$i<$cantidad;$i++){
+            $viaje->venderPasaje($pasajeros[$i]);
+        }
+        return $viaje;
     }
 
     /**
@@ -51,9 +56,9 @@
      * @return Viaje
      */
 
-    function modificarViaje($viaje){
+    function modificarViaje($viaje,$menu){
         do{
-            $opcion= menuModificacion();
+            $opcion= $menu->menuModificacion();
             switch($opcion){
                 case 1: 
                     echo"Ingrese un codigo\n";
@@ -69,7 +74,7 @@
                     $viaje= modificarCantidad($viaje);
                     break;
                 case 4:
-                    $viaje= modificarResponsable($viaje);
+                    $viaje= modificarResponsable($viaje,$menu);
                     break;
                 case 5:
                     $viaje= modificarPasajeros($viaje);
@@ -114,17 +119,17 @@
      * @param Viaje
      * @return Viaje
      */
-    function modificarResponsable($viaje){
+    function modificarResponsable($viaje,$menu){
 
         do{
-            $opcion= menuResponsable();
+            $opcion= $menu->menuResponsable();
             switch($opcion){
                 case 1: 
                     $responsable=crearResponsable();
                     $viaje-> setResponsable($responsable);
                     break;
                 case 2: 
-                    $viaje= modResponsable($viaje);
+                    $viaje= modResponsable($viaje,$menu);
                     break;
                 case 3:
                     $responsable= $viaje->getResponsable();
@@ -139,9 +144,9 @@
 
     }
 
-    function modResponsable($viaje){
+    function modResponsable($viaje,$menu){
         do{
-            $opcion= menuModificarResponsable();
+            $opcion= $menu->menuModificarResponsable();
             switch($opcion){
                 case 1: 
                     $responsable= $viaje-> getResponsable();
@@ -420,130 +425,6 @@
         echo"Ingrese el apellido\n";
         $apellido= trim(fgets(STDIN));
         return new ResponsableV($numero, $licencia, $nombre, $apellido);
-    }
-
-    //menu para el responsable
-    function menuResponsable(){
-        $band= true;
-        do{
-            echo 
-            "Presione:  
-            1 cambiar responsable
-            2 modificar responsable
-            3 ver informacion del responsable
-            4 para salir\n";
-            $opcion =  trim(fgets(STDIN));
-            if($opcion>0 && $opcion<=4){
-                $band=false;
-            }else{
-                echo "Opcion invalida\n";
-            }
-        }while($band);
-
-        return $opcion;
-    }
-
-    //Menu para modificar al responsable
-    function menuModificarResponsable(){
-        $band= true;
-        do{
-            echo 
-            "Presione:  
-            1 cambiar número de licencia
-            2 cambiar nombre
-            3 cambiar apellido
-            4 para salir\n";
-            $opcion =  trim(fgets(STDIN));
-            if($opcion>0 && $opcion<=4){
-                $band=false;
-            }else{
-                echo "Opcion invalida\n";
-            }
-        }while($band);
-        return $opcion;
-    }
-
-    //Menu para  Pasajeros
-    function menuPasajeros(){
-        $band =true;
-        do{
-            echo 
-            "Presione:  
-            1 agregar pasajero
-            2 quitar pasajero
-            3 modificar pasajero
-            4 para salir\n";
-            $opcion =  trim(fgets(STDIN));
-            if($opcion>0 && $opcion<=4){
-                $band=false;
-            }else{
-                echo "Opcion invalida\n";
-            }
-        }while($band);
-        return $opcion;
-
-    }
-
-    //Menu para modificar un pasajero
-    function menuModificarPasajero(){
-        $band= true;
-        do{
-            echo 
-            "Presione:  
-            1 cambiar nombre
-            2 cambiar apellido
-            3 cambiar telefono
-            4 para salir\n";
-            $opcion =  trim(fgets(STDIN));
-            if($opcion>0 && $opcion<=4){
-                $band=false;
-            }else{
-                echo "Opcion invalida\n";
-            }
-        }while($band);
-        return $opcion;
-    }
-
-    //Menu para modificar viajes
-    function menuModificacion(){
-        $band =true;
-        do{
-            echo 
-            "Presione:  
-            1 modificar codigo
-            2 modificar destino 
-            3 modificar cantidad
-            4 modificar encargado de viaje
-            5 modificar lista de pasajeros
-            6 para salir\n";
-            $opcion =  trim(fgets(STDIN));
-            if($opcion>0 && $opcion<=6){
-                $band=false;
-            }else{
-                echo "Opcion invalida\n";
-            }
-        }while($band);
-        return $opcion;
-    }
-
-    //Menu para viaje
-    function menuViaje(){
-        $band =true;
-        do{
-            echo 
-            "Presione:  
-            1 para ingresar un viaje
-            2 para modificar el viaje 
-            3 para ver la informacion del viaje
-            4 para salir\n";
-            $opcion =  trim(fgets(STDIN));
-            if($opcion>0 && $opcion<=4){
-                $band=false;
-            }else{
-                echo "Opcion invalida\n";
-            }
-        }while($band);
-        return $opcion;
     }
 
     function viajeInicial(){

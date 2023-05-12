@@ -15,13 +15,19 @@ class Viaje{
 
     private $responsable;
 
-    public function __construct($codigo,$destino,$cantidad,$pasajeros, $responsable)
+    private $costo;
+
+    private $sumaCosto;
+
+    public function __construct($codigo,$destino,$cantidad,$pasajeros, $responsable, $costo, $sumaCosto)
     {
         $this->codigo= $codigo;
         $this->destino= $destino;
         $this->cantidad= $cantidad;
         $this->pasajeros= $pasajeros;
         $this->responsable= $responsable;
+        $this->costo=$costo;
+        $this->sumaCosto=$sumaCosto;
     }
 
     public function getCodigo(){
@@ -64,27 +70,53 @@ class Viaje{
         $this->responsable= $responsable;
     }
 
+    public function getCosto()
+    {
+        return $this->costo;
+    }
+
+    public function setCosto($costo)
+    {
+        $this->costo = $costo;
+
+        return $this;
+    }
+
+    public function getSumaCosto()
+    {
+        return $this->sumaCosto;
+    }
+
+    public function setSumaCosto($sumaCosto)
+    {
+        $this->sumaCosto = $sumaCosto;
+
+        return $this;
+    }
+
     /**
      * Agrega un pasajero al arreglo de pasajeros si todavia hay espacio
-     * @param array Un arreglo asociativo
-     * @return bool Retorna false si ya se alcanzo el maximo de pasajeros sino devuelve true y suma un pasajero en el arreglo de pasajeros
+     * @param Pasajero Un Objeto de tipo Pasajero
+     * @return double Retorna el costo a abonar por el pasajero
      */
 
-    public function agregarPasajero($pasajero){
-        $band = false;
-        $indice=count($this->pasajeros);
-        if($this->cantidad > $indice){
+    public function venderPasaje($pasajero){
+        $importe=0;
+        $band = $this->hayPasajesDisponible();
+        if($band){
+            $indice=count($this->pasajeros);
             $this->pasajeros[$indice]= $pasajero;
-            $band =true;
+            $importe= $this->getCosto()*(1+$pasajero->darPorcentajeIncremento());
+            $this->sumaCosto= $this->sumaCosto+$importe;
         }
-        return $band;
+        return $importe;
     }
     public function __toString()
     {
-        return "(".$this->codigo.", ".$this->destino.", ".$this->cantidad.", ".($this->getResponsable())->__toString().", ".$this->auxToString().")";
+        return "(".$this->codigo.", ".$this->destino.", ".$this->cantidad.", ".($this->getResponsable())->__toString().", ".$this->auxToString().", ".$this->getCosto().", ".$this->getSumaCosto().")";
     }
 
-    public function auxToString(){
+    private function auxToString(){
         $cadena="[";
         $indice=count($this->pasajeros);
         if($indice==0){
@@ -98,6 +130,12 @@ class Viaje{
         }
         return $cadena;
     }
+
+    public function hayPasajesDisponible(){
+        $hayLugar= count($this->getPasajeros())== $this->getCantidad();
+        return $hayLugar;
+    }
+
 }
 
 ?>
