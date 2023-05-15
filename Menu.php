@@ -70,6 +70,27 @@ class Menu{
 
     }
 
+    //Menu para tipo pasajero
+
+    function menuTipoPasajero(){
+        $band =true;
+        do{
+            echo 
+            "Presione:  
+            1 agregar pasajero estandar
+            2 agregar pasajero VIP
+            3 agregar pasajero con necesidades\n";
+            $opcion =  trim(fgets(STDIN));
+            if($opcion>0 && $opcion<=3){
+                $band=false;
+            }else{
+                echo "Opcion invalida\n";
+            }
+        }while($band);
+        return $opcion;
+
+    }
+
      //Menu para modificar un pasajero
      function menuModificarPasajero(){
         $band= true;

@@ -1,6 +1,8 @@
 <?php
 
 include 'Pasajero.php';
+include 'PasajeroVIP.php';
+include 'PasajeroConNecesidades.php'; 
 include 'ResponsableV.php';
 
 class Viaje{
@@ -132,7 +134,7 @@ class Viaje{
     }
 
     public function hayPasajesDisponible(){
-        $hayLugar= count($this->getPasajeros())== $this->getCantidad();
+        $hayLugar= count($this->getPasajeros())< $this->getCantidad();
         return $hayLugar;
     }
 

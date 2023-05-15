@@ -39,7 +39,7 @@ class PasajeroVIP extends Pasajero {
 
     public function __toString()
     {
-        return parent::__toString()+", Cantidad de Millas: "+$this->getCantidadMillas()+", Número Viajero Frecuente"+$this->getNumeroViajeroFrecuente();
+        return parent::__toString().", Cantidad de Millas: ".$this->getCantidadMillas().", Número Viajero Frecuente: ".$this->getNumeroViajeroFrecuente()."*)";
     }
 
     public function darPorcentajeIncremento(){

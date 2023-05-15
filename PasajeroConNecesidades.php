@@ -8,12 +8,12 @@ class PasajeroConNecesidades extends Pasajero {
 
     private $asistencia;
 
-    public function __construct($nombre, $apellido, $dni,$telefono, $nroAsiento, $nroTicket,$silla,$comida)
+    public function __construct($nombre, $apellido, $dni,$telefono, $nroAsiento, $nroTicket,$silla,$comida,$asistencia)
     {
         parent::__construct($nombre, $apellido, $dni,$telefono, $nroAsiento, $nroTicket);
         $this->silla= $silla;
         $this->comida=$comida;
-
+        $this->asistencia=$asistencia;
     }
 
     public function getSilla()
@@ -55,7 +55,7 @@ class PasajeroConNecesidades extends Pasajero {
 
     public function __toString()
     {
-        return parent::__toString().", Necesita silla: ".$this->getSilla().", Necesita comida: ".$this->getComida().", Necesita asistencia: ".$this->getAsistencia().")";
+        return parent::__toString().", Necesita silla: ".$this->getSilla().", Necesita comida: ".$this->getComida().", Necesita asistencia: ".$this->getAsistencia()."*)";
     }
 
     public function darPorcentajeIncremento(){
